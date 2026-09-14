@@ -1,0 +1,83 @@
+---
+---
+<div class="calc" id="paint-calc">
+  <h3>Paint Cost Calculator</h3>
+  <label>
+    Room length (ft)
+    <input type="number" id="pc-length" value="12" min="1" />
+  </label>
+  <label>
+    Room width (ft)
+    <input type="number" id="pc-width" value="10" min="1" />
+  </label>
+  <label>
+    Wall height (ft)
+    <input type="number" id="pc-height" value="8" min="1" />
+  </label>
+  <label>
+    Number of coats
+    <input type="number" id="pc-coats" value="2" min="1" max="4" />
+  </label>
+  <label>
+    Paint price per gallon ($)
+    <input type="number" id="pc-price" value="35" min="0" />
+  </label>
+  <div class="result" id="pc-result">Fill in the numbers above to see your estimate.</div>
+</div>
+
+<style>
+  .calc {
+    border: 1px solid #e4e0d6;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    background: #ffffff;
+  }
+  .calc h3 { margin-top: 0; }
+  .calc label {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+  .calc input {
+    width: 90px;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #e4e0d6;
+    border-radius: 4px;
+  }
+  .result {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #fbfaf7;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+</style>
+
+<script>
+  function estimate() {
+    const length = parseFloat((document.getElementById('pc-length') as HTMLInputElement).value) || 0;
+    const width = parseFloat((document.getElementById('pc-width') as HTMLInputElement).value) || 0;
+    const height = parseFloat((document.getElementById('pc-height') as HTMLInputElement).value) || 0;
+    const coats = parseFloat((document.getElementById('pc-coats') as HTMLInputElement).value) || 1;
+    const pricePerGallon = parseFloat((document.getElementById('pc-price') as HTMLInputElement).value) || 0;
+
+    const perimeter = 2 * (length + width);
+    const wallArea = perimeter * height;
+    // one gallon covers roughly 350 sq ft per coat
+    const gallonsNeeded = Math.ceil((wallArea * coats) / 350);
+    const totalCost = gallonsNeeded * pricePerGallon;
+
+    const resultEl = document.getElementById('pc-result');
+    if (resultEl) {
+      resultEl.textContent = `You'll need about ${gallonsNeeded} gallon(s) of paint, costing roughly $${totalCost.toFixed(2)} for paint alone (${wallArea.toFixed(0)} sq ft of wall, ${coats} coat(s)).`;
+    }
+  }
+
+  ['pc-length', 'pc-width', 'pc-height', 'pc-coats', 'pc-price'].forEach((id) => {
+    document.getElementById(id)?.addEventListener('input', estimate);
+  });
+  estimate();
+</script>

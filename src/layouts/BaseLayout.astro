@@ -1,0 +1,84 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const siteName = 'Budget Home Fixes';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | {siteName}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root {
+        --bg: #fbfaf7;
+        --text: #22231f;
+        --muted: #5b5c56;
+        --accent: #b5561f;
+        --border: #e4e0d6;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+      }
+      header {
+        border-bottom: 1px solid var(--border);
+        padding: 1.25rem 1.5rem;
+      }
+      header a {
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+      nav {
+        display: flex;
+        gap: 1.25rem;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+      }
+      nav a { color: var(--muted); text-decoration: none; }
+      nav a:hover { color: var(--accent); }
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 4rem;
+      }
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 1.5rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      h1, h2, h3 { line-height: 1.25; }
+      a { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/">Budget Home Fixes</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      &copy; {new Date().getFullYear()} Budget Home Fixes. All rights reserved.
+    </footer>
+  </body>
+</html>

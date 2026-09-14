@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+<BaseLayout
+  title="Home"
+  description="Real cost breakdowns and comparisons for budget-friendly home upgrades, especially for renters and small budgets."
+>
+  <h1>Budget Home Fixes</h1>
+  <p>Real cost breakdowns and comparisons for home upgrades — built for renters and anyone working with a tight budget.</p>
+
+  <ul style="list-style: none; padding: 0;">
+    {posts.map((post) => (
+      <li style="margin: 1.5rem 0;">
+        <h2 style="margin-bottom: 0.25rem;">
+          <a href={`/blog/${post.id}`}>{post.data.title}</a>
+        </h2>
+        <p style="color: #5b5c56; margin-top: 0;">{post.data.description}</p>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>
