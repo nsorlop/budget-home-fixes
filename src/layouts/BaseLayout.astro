@@ -2,9 +2,28 @@
 interface Props {
   title: string;
   description: string;
+  type?: 'website' | 'article';
+  pubDate?: Date;
+  updatedDate?: Date;
 }
-const { title, description } = Astro.props;
+const { title, description, type = 'website', pubDate, updatedDate } = Astro.props;
 const siteName = 'Budget Home Fixes';
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const jsonLd =
+  type === 'article' && pubDate
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: title,
+        description,
+        datePublished: pubDate.toISOString(),
+        dateModified: (updatedDate ?? pubDate).toISOString(),
+        author: { '@type': 'Organization', name: siteName },
+        publisher: { '@type': 'Organization', name: siteName },
+        mainEntityOfPage: canonicalURL.toString(),
+      }
+    : null;
 ---
 <!doctype html>
 <html lang="en">
@@ -13,7 +32,21 @@ const siteName = 'Budget Home Fixes';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} | {siteName}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
     <style>
       :root {
         --bg: #fbfaf7;
