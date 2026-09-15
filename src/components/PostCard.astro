@@ -1,0 +1,73 @@
+---
+import CategoryIcon from './CategoryIcon.astro';
+import { CATEGORY_COLORS, categorySlug } from '../lib/categories';
+
+interface Props {
+  post: {
+    id: string;
+    data: {
+      title: string;
+      description: string;
+      category: 'Painting' | 'Wallpaper' | 'Kitchen' | 'Storage' | 'Guides';
+    };
+  };
+}
+const { post } = Astro.props;
+const color = CATEGORY_COLORS[post.data.category];
+---
+<div class="card" style={`--card-color: ${color}`}>
+  <a class="card-overlay" href={`/blog/${post.id}`} aria-label={post.data.title}></a>
+  <a class="tag" href={`/category/${categorySlug(post.data.category)}`}>
+    <CategoryIcon category={post.data.category} size={14} />
+    {post.data.category}
+  </a>
+  <h2>{post.data.title}</h2>
+  <p>{post.data.description}</p>
+</div>
+
+<style>
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--card-color, var(--accent));
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+  }
+  .tag {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--card-color, var(--accent));
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+  }
+  .tag:hover { text-decoration: underline; }
+  .card h2 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0 0.4rem;
+    color: var(--text);
+  }
+  .card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+</style>

@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CategoryIcon from '../../components/CategoryIcon.astro';
-import { CATEGORY_COLORS } from '../../lib/categories';
+import PostCard from '../../components/PostCard.astro';
+import ShareLinks from '../../components/ShareLinks.astro';
+import { CATEGORY_COLORS, categorySlug, relatedHeading } from '../../lib/categories';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -15,6 +17,14 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const color = CATEGORY_COLORS[post.data.category];
+
+const allPosts = await getCollection('blog');
+const related = allPosts
+  .filter((p) => p.id !== post.id && p.data.category === post.data.category)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 <BaseLayout
   title={post.data.title}
@@ -24,10 +34,10 @@ const color = CATEGORY_COLORS[post.data.category];
   updatedDate={post.data.updatedDate}
 >
   <article>
-    <span class="tag" style={`color: ${color}`}>
+    <a class="tag" href={`/category/${categorySlug(post.data.category)}`} style={`color: ${color}`}>
       <CategoryIcon category={post.data.category} size={14} />
       {post.data.category}
-    </span>
+    </a>
     <h1>{post.data.title}</h1>
     <p class="meta">
       Published {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -35,7 +45,18 @@ const color = CATEGORY_COLORS[post.data.category];
     <div class="prose">
       <Content />
     </div>
+
+    <ShareLinks url={canonicalURL} title={post.data.title} />
   </article>
+
+  {related.length > 0 && (
+    <section class="related">
+      <h2>{relatedHeading(post.data.category)}</h2>
+      <div class="grid">
+        {related.map((p) => <PostCard post={p} />)}
+      </div>
+    </section>
+  )}
 </BaseLayout>
 
 <style>
@@ -47,7 +68,9 @@ const color = CATEGORY_COLORS[post.data.category];
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    text-decoration: none;
   }
+  .tag:hover { text-decoration: underline; }
   h1 {
     font-size: 2rem;
     margin: 0.6rem 0 0.4rem;
@@ -56,5 +79,23 @@ const color = CATEGORY_COLORS[post.data.category];
     color: var(--muted);
     font-size: 0.9rem;
     margin: 0 0 1.5rem;
+  }
+  .related {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .related h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    margin: 0 0 1rem;
+  }
+  .grid {
+    display: grid;
+    gap: 1.1rem;
   }
 </style>

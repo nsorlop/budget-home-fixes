@@ -1,13 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CategoryIcon from '../components/CategoryIcon.astro';
-import { CATEGORY_COLORS } from '../lib/categories';
+import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 const categoryCount = new Set(posts.map((p) => p.data.category)).size;
+
+const featuredIds = ['renter-friendly-upgrades-with-prices', 'get-your-full-security-deposit-back'];
+const featured = featuredIds
+  .map((id) => posts.find((p) => p.id === id))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
+const rest = posts.filter((p) => !featuredIds.includes(p.id));
 ---
 <BaseLayout
   title="Home"
@@ -24,20 +29,18 @@ const categoryCount = new Set(posts.map((p) => p.data.category)).size;
     <p class="hero-stat">{posts.length} cost guides across {categoryCount} categories</p>
   </section>
 
+  {featured.length > 0 && (
+    <section class="start-here">
+      <h2>New here? Start with these two</h2>
+      <div class="grid">
+        {featured.map((post) => <PostCard post={post} />)}
+      </div>
+    </section>
+  )}
+
+  <h2 class="all-guides-heading">All cost guides</h2>
   <div class="grid">
-    {posts.map((post) => {
-      const color = CATEGORY_COLORS[post.data.category];
-      return (
-        <a class="card" href={`/blog/${post.id}`} style={`--card-color: ${color}`}>
-          <span class="tag">
-            <CategoryIcon category={post.data.category} size={14} />
-            {post.data.category}
-          </span>
-          <h2>{post.data.title}</h2>
-          <p>{post.data.description}</p>
-        </a>
-      );
-    })}
+    {rest.map((post) => <PostCard post={post} />)}
   </div>
 </BaseLayout>
 
@@ -86,43 +89,21 @@ const categoryCount = new Set(posts.map((p) => p.data.category)).size;
     max-width: 34rem;
     margin: 0;
   }
+  .start-here {
+    margin-bottom: 2.5rem;
+  }
+  .start-here h2, .all-guides-heading {
+    font-size: 1.1rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    margin: 0 0 1rem;
+  }
   .grid {
     display: grid;
     gap: 1.1rem;
-  }
-  .card {
-    display: block;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--card-color, var(--accent));
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    text-decoration: none;
-    color: var(--text);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  .card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--card-color, var(--accent));
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-  .card h2 {
-    font-size: 1.25rem;
-    margin: 0.5rem 0 0.4rem;
-  }
-  .card p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
   }
 </style>
