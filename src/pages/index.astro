@@ -7,18 +7,21 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+const categoryCount = new Set(posts.map((p) => p.data.category)).size;
 ---
 <BaseLayout
   title="Home"
   description="Real cost breakdowns and comparisons for budget-friendly home upgrades, especially for renters and small budgets."
 >
   <section class="hero">
+    <svg class="hero-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 12 5l8 7"/><path d="M6 11v9h12v-9"/></svg>
     <span class="eyebrow">Cost guides &amp; comparisons</span>
     <h1>Know the real cost before you touch a wall.</h1>
     <p class="subtitle">
       Straight cost breakdowns and side-by-side comparisons for home upgrades — built for renters
       and anyone working with a tight budget. No guesswork, no sponsored fluff.
     </p>
+    <p class="hero-stat">{posts.length} cost guides across {categoryCount} categories</p>
   </section>
 
   <div class="grid">
@@ -40,9 +43,26 @@ const posts = (await getCollection('blog')).sort(
 
 <style>
   .hero {
+    position: relative;
     padding: 1rem 0 2.5rem;
     border-bottom: 1px solid var(--border);
     margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .hero-mark {
+    position: absolute;
+    top: -1.5rem;
+    right: -1.5rem;
+    width: 9rem;
+    height: 9rem;
+    color: var(--accent);
+    opacity: 0.06;
+  }
+  .hero-stat {
+    margin: 1.1rem 0 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-dark);
   }
   .eyebrow {
     display: inline-block;
