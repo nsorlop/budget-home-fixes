@@ -2,6 +2,7 @@
 title: "10 Renter-Friendly Upgrades That Won't Cost You Your Deposit (With Real Prices)"
 description: "Ten home upgrades that are safe for renters, ranked with real price ranges and deposit-risk level for each one."
 pubDate: 2026-09-14
+category: Guides
 ---
 
 Not every "renter-friendly" upgrade is actually risk-free — some just have a lower chance of a problem, not zero. Here are ten upgrades ranked by real cost and how likely each one is to cause a deposit issue.

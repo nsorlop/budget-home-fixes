@@ -8,6 +8,7 @@ const blog = defineCollection({
     description: z.string(),
     pubDate: z.date(),
     updatedDate: z.date().optional(),
+    category: z.enum(['Painting', 'Wallpaper', 'Kitchen', 'Storage', 'Guides']),
   }),
 });
 

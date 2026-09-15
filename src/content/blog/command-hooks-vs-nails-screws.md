@@ -2,6 +2,7 @@
 title: "Command Hooks vs. Nails and Screws: Which Actually Costs Less for Renters?"
 description: "A real cost comparison between adhesive hooks and traditional nails/screws for renters, including the hidden deposit cost most people forget to count."
 pubDate: 2026-09-14
+category: Storage
 ---
 
 Adhesive hooks look more expensive per unit than a box of nails, so it's easy to assume drilling is the "cheap" option. Once you add the move-out cost, the math flips for most renters.

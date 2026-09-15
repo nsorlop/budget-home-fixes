@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategoryIcon from '../../components/CategoryIcon.astro';
+import { CATEGORY_COLORS } from '../../lib/categories';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -12,6 +14,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const color = CATEGORY_COLORS[post.data.category];
 ---
 <BaseLayout
   title={post.data.title}
@@ -21,10 +24,37 @@ const { Content } = await render(post);
   updatedDate={post.data.updatedDate}
 >
   <article>
+    <span class="tag" style={`color: ${color}`}>
+      <CategoryIcon category={post.data.category} size={14} />
+      {post.data.category}
+    </span>
     <h1>{post.data.title}</h1>
-    <p style="color: #5b5c56;">
+    <p class="meta">
       Published {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
     </p>
-    <Content />
+    <div class="prose">
+      <Content />
+    </div>
   </article>
 </BaseLayout>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  h1 {
+    font-size: 2rem;
+    margin: 0.6rem 0 0.4rem;
+  }
+  .meta {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 1.5rem;
+  }
+</style>

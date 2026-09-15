@@ -2,6 +2,7 @@
 title: "Peel-and-Stick Backsplash vs. Tile: Cost Comparison for a Rental Kitchen"
 description: "Real cost, install time, and deposit-risk comparison between peel-and-stick backsplash panels and traditional tile for renters upgrading a kitchen."
 pubDate: 2026-09-14
+category: Kitchen
 ---
 
 A backsplash is one of the few upgrades that changes how an entire kitchen looks in an afternoon. For renters, the question is whether that's worth doing with real tile or a removable alternative.

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import { CATEGORY_COLORS } from '../lib/categories';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog')).sort(
@@ -10,17 +12,97 @@ const posts = (await getCollection('blog')).sort(
   title="Home"
   description="Real cost breakdowns and comparisons for budget-friendly home upgrades, especially for renters and small budgets."
 >
-  <h1>Budget Home Fixes</h1>
-  <p>Real cost breakdowns and comparisons for home upgrades — built for renters and anyone working with a tight budget.</p>
+  <section class="hero">
+    <span class="eyebrow">Cost guides &amp; comparisons</span>
+    <h1>Know the real cost before you touch a wall.</h1>
+    <p class="subtitle">
+      Straight cost breakdowns and side-by-side comparisons for home upgrades — built for renters
+      and anyone working with a tight budget. No guesswork, no sponsored fluff.
+    </p>
+  </section>
 
-  <ul style="list-style: none; padding: 0;">
-    {posts.map((post) => (
-      <li style="margin: 1.5rem 0;">
-        <h2 style="margin-bottom: 0.25rem;">
-          <a href={`/blog/${post.id}`}>{post.data.title}</a>
-        </h2>
-        <p style="color: #5b5c56; margin-top: 0;">{post.data.description}</p>
-      </li>
-    ))}
-  </ul>
+  <div class="grid">
+    {posts.map((post) => {
+      const color = CATEGORY_COLORS[post.data.category];
+      return (
+        <a class="card" href={`/blog/${post.id}`} style={`--card-color: ${color}`}>
+          <span class="tag">
+            <CategoryIcon category={post.data.category} size={14} />
+            {post.data.category}
+          </span>
+          <h2>{post.data.title}</h2>
+          <p>{post.data.description}</p>
+        </a>
+      );
+    })}
+  </div>
 </BaseLayout>
+
+<style>
+  .hero {
+    padding: 1rem 0 2.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    background: var(--accent-soft);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-size: 2.1rem;
+    margin: 0 0 0.75rem;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 34rem;
+    margin: 0;
+  }
+  .grid {
+    display: grid;
+    gap: 1.1rem;
+  }
+  .card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--card-color, var(--accent));
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--card-color, var(--accent));
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .card h2 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0 0.4rem;
+  }
+  .card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+</style>
