@@ -3,6 +3,8 @@ title: "How to Get Your Full Security Deposit Back: A Cost-Risk Checklist"
 description: "A room-by-room checklist ranking common apartment upgrades and habits by how much deposit risk they actually carry."
 pubDate: 2026-09-15
 category: Guides
+image: /images/guides-2.jpg
+imageAlt: A stack of moving boxes near a window
 ---
 
 Most deposit deductions come from a handful of predictable causes. Here's a checklist ranked by real risk level, based on the cost breakdowns across our other guides.

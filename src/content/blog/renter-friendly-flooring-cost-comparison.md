@@ -3,6 +3,8 @@ title: "Best Renter-Friendly Flooring Options: Cost Comparison (Vinyl, Rugs, Pee
 description: "Cost and durability comparison of renter-safe flooring upgrades, from area rugs to peel-and-stick vinyl tiles, with real price ranges per room."
 pubDate: 2026-09-15
 category: Guides
+image: /images/guides-1.jpg
+imageAlt: Labeled cardboard moving boxes in an apartment kitchen
 ---
 
 Bad flooring is one of the hardest things to ignore in a rental, and also one of the easiest to cover without a permanent change.

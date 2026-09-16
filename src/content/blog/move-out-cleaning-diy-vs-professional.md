@@ -3,6 +3,8 @@ title: "Move-Out Cleaning: DIY Cost vs. Hiring a Professional Cleaning Service"
 description: "Real cost comparison between cleaning an apartment yourself before move-out and hiring a professional move-out cleaning service, and which one actually protects your deposit better."
 pubDate: 2026-09-15
 category: Guides
+image: /images/guides-2.jpg
+imageAlt: A stack of moving boxes near a window
 ---
 
 Move-out cleaning is the last chance to protect your deposit, which makes this one of the few places where paying more can be the financially smarter choice.

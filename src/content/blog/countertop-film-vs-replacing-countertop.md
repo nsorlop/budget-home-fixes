@@ -3,6 +3,8 @@ title: "Peel-and-Stick Countertop Film vs. Replacing a Countertop: Cost Comparis
 description: "Real cost and durability comparison between countertop contact paper/film and full countertop replacement for renters and budget kitchens."
 pubDate: 2026-09-15
 category: Kitchen
+image: /images/kitchen-1.jpg
+imageAlt: A modern kitchen with a marble backsplash and light cabinets
 ---
 
 Countertop film promises a granite or marble look for a fraction of the price. It delivers on price — durability is where the trade-off shows up.

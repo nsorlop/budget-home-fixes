@@ -42,6 +42,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <p class="meta">
       Published {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
     </p>
+    <img class="hero-image" src={post.data.image} alt={post.data.imageAlt} width="720" height="360" />
     <div class="prose">
       <Content />
     </div>
@@ -79,6 +80,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     color: var(--muted);
     font-size: 0.9rem;
     margin: 0 0 1.5rem;
+  }
+  .hero-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
   }
   .related {
     margin-top: 3rem;

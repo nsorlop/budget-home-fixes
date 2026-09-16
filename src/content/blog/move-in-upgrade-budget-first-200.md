@@ -3,6 +3,8 @@ title: "Apartment Move-In Upgrade Budget: What to Spend Your First $200 On"
 description: "A prioritized, cost-ranked list of the highest-impact renter-friendly upgrades to spend a limited move-in budget on first."
 pubDate: 2026-09-15
 category: Guides
+image: /images/guides-1.jpg
+imageAlt: Labeled cardboard moving boxes in an apartment kitchen
 ---
 
 Move-in costs (deposit, first month's rent, movers) already eat most people's budget. If there's $200 left for upgrades, the order you spend it in matters more than the total.

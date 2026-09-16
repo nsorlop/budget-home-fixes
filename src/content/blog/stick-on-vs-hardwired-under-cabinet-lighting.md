@@ -3,6 +3,8 @@ title: "Under-Cabinet LED Lighting: Stick-On vs. Hardwired Cost Comparison"
 description: "Cost, install time, and deposit-risk comparison between battery/stick-on LED strips and hardwired under-cabinet lighting."
 pubDate: 2026-09-15
 category: Kitchen
+image: /images/kitchen-1.jpg
+imageAlt: A modern kitchen with a marble backsplash and light cabinets
 ---
 
 Under-cabinet lighting is one of the highest-impact-per-dollar kitchen upgrades, but the "which kind" question matters a lot if you're renting or want to keep costs down.

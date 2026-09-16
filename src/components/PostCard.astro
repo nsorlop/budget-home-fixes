@@ -9,6 +9,8 @@ interface Props {
       title: string;
       description: string;
       category: 'Painting' | 'Wallpaper' | 'Kitchen' | 'Storage' | 'Guides';
+      image: string;
+      imageAlt: string;
     };
   };
 }
@@ -17,12 +19,15 @@ const color = CATEGORY_COLORS[post.data.category];
 ---
 <div class="card" style={`--card-color: ${color}`}>
   <a class="card-overlay" href={`/blog/${post.id}`} aria-label={post.data.title}></a>
-  <a class="tag" href={`/category/${categorySlug(post.data.category)}`}>
-    <CategoryIcon category={post.data.category} size={14} />
-    {post.data.category}
-  </a>
-  <h2>{post.data.title}</h2>
-  <p>{post.data.description}</p>
+  <img class="card-image" src={post.data.image} alt={post.data.imageAlt} loading="lazy" width="400" height="220" />
+  <div class="card-body">
+    <a class="tag" href={`/category/${categorySlug(post.data.category)}`}>
+      <CategoryIcon category={post.data.category} size={14} />
+      {post.data.category}
+    </a>
+    <h2>{post.data.title}</h2>
+    <p>{post.data.description}</p>
+  </div>
 </div>
 
 <style>
@@ -30,9 +35,8 @@ const color = CATEGORY_COLORS[post.data.category];
     position: relative;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-left: 4px solid var(--card-color, var(--accent));
     border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
+    overflow: hidden;
     box-shadow: var(--shadow-sm);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
@@ -44,7 +48,16 @@ const color = CATEGORY_COLORS[post.data.category];
     position: absolute;
     inset: 0;
     z-index: 0;
-    border-radius: inherit;
+  }
+  .card-image {
+    display: block;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--card-color, var(--accent));
+  }
+  .card-body {
+    padding: 1.1rem 1.4rem 1.3rem;
   }
   .tag {
     position: relative;
@@ -61,7 +74,7 @@ const color = CATEGORY_COLORS[post.data.category];
   }
   .tag:hover { text-decoration: underline; }
   .card h2 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     margin: 0.5rem 0 0.4rem;
     color: var(--text);
   }

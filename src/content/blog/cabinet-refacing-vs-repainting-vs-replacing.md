@@ -3,6 +3,8 @@ title: "Cabinet Refacing vs. Repainting vs. Replacing: Which Is Cheapest?"
 description: "Three kitchen cabinet upgrade paths compared by real cost, so you know which one actually fits your budget and cabinet condition."
 pubDate: 2026-09-15
 category: Kitchen
+image: /images/kitchen-2.jpg
+imageAlt: Close-up of kitchen counter and cabinets
 ---
 
 "Refacing" gets mentioned as a middle option between painting and full replacement, but it's often unclear what it actually includes or costs. Here's the real breakdown.

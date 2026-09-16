@@ -3,6 +3,8 @@ title: "Painting Kitchen Cabinets vs. Replacing Them: Full Cost Comparison"
 description: "Real cost breakdown comparing cabinet painting/refinishing to full replacement, including the labor costs most estimates leave out."
 pubDate: 2026-09-15
 category: Kitchen
+image: /images/kitchen-2.jpg
+imageAlt: Close-up of kitchen counter and cabinets
 ---
 
 A dated kitchen usually comes down to the cabinets. Before assuming you need new ones, it's worth knowing how far apart these two options really are on price.

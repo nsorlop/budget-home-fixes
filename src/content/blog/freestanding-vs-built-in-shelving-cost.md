@@ -3,6 +3,8 @@ title: "Freestanding Shelving vs. Built-In Shelving: Cost Comparison for Renters
 description: "Real cost comparison between freestanding shelving units and built-in/mounted shelving, including which one you can actually take with you."
 pubDate: 2026-09-15
 category: Storage
+image: /images/storage-2.jpg
+imageAlt: An organized walk-in closet with modern shelving
 ---
 
 Built-in shelving looks more polished in photos, but the cost and portability trade-offs matter more than the look for most renters.

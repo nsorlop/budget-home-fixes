@@ -3,6 +3,8 @@ title: "Roller vs. Paint Sprayer: Which Is Cheaper for a Full Room?"
 description: "Cost comparison between rolling and spraying paint, including rental fees, paint waste, and masking time most people forget to budget for."
 pubDate: 2026-09-15
 category: Painting
+image: /images/painting-2.jpg
+imageAlt: A gray wall being freshly painted with a roller
 ---
 
 Paint sprayers look like the "pro" option, and rental counters make them sound cheap per day. Once you add masking time and paint waste, the comparison isn't as one-sided as it looks.

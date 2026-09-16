@@ -3,6 +3,8 @@ title: "How Much Does It Cost to Paint a Bathroom? (Moisture-Safe Paint Price Gu
 description: "Bathroom paint costs more than a regular room because it needs a moisture-resistant formula. Here's the real price difference and when it's worth paying it."
 pubDate: 2026-09-15
 category: Painting
+image: /images/painting-1.jpg
+imageAlt: A roller applying white paint to a bedroom wall
 ---
 
 Bathrooms are small, so people assume they're the cheapest room to paint. The room size is smaller, but the paint itself costs more — and skipping the right formula leads to peeling within a year.
