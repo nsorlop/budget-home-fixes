@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://budgethomefixes.com/sitemap-index.xml
+Sitemap: https://thebudgethomefixes.com/sitemap-index.xml

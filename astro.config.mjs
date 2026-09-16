@@ -7,7 +7,6 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: update once the real domain is registered
-  site: 'https://budgethomefixes.com',
+  site: 'https://thebudgethomefixes.com',
   integrations: [mdx(), sitemap()]
 });
