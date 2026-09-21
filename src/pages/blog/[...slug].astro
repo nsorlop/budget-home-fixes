@@ -35,6 +35,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   type="article"
   pubDate={post.data.pubDate}
   updatedDate={post.data.updatedDate}
+  image={post.data.image}
 >
   <article>
     <a class="tag" href={`/category/${categorySlug(post.data.category)}`} style={`color: ${color}`}>
