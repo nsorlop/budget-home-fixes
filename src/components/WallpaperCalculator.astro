@@ -1,0 +1,126 @@
+---
+interface Props {
+  width?: number;
+  height?: number;
+  price?: number;
+}
+const { width = 12, height = 8, price = 30 } = Astro.props;
+---
+<div class="calc" id="wp-calc">
+  <h3>Wallpaper roll calculator</h3>
+  <p class="calc-intro">
+    Works out how many peel-and-stick or standard rolls you need, including the waste a pattern repeat causes.
+  </p>
+
+  <div class="calc-grid">
+    <label>Wall width, total (ft)<input type="number" id="wp-width" value={width} min="1" step="0.5" /></label>
+    <label>Wall height (ft)<input type="number" id="wp-height" value={height} min="1" step="0.5" /></label>
+    <label>Roll width (in)<input type="number" id="wp-rollw" value="20.5" min="10" step="0.25" /></label>
+    <label>Roll length (ft)<input type="number" id="wp-rolll" value="16.5" min="4" step="0.5" /></label>
+    <label>Pattern repeat (in, 0 = none)<input type="number" id="wp-repeat" value="0" min="0" step="1" /></label>
+    <label>Price per roll ($)<input type="number" id="wp-price" value={price} min="0" /></label>
+  </div>
+
+  <div class="result" id="wp-result" aria-live="polite">Fill in the numbers above to see your estimate.</div>
+  <p class="calc-note">
+    Method: number of strips = wall width divided by roll width, rounded up. Each strip is the wall height plus 2
+    inches of trim allowance, rounded up to the next pattern repeat. Rolls = strips divided by how many strips fit in
+    one roll, rounded up. Doors and windows are not subtracted, because strips over them are still cut full length.
+    Check your product's own instructions and buy every roll from the same batch. This is a planning estimate.
+  </p>
+</div>
+
+<style>
+  .calc {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin: 1.75rem 0;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .calc h3 { margin: 0 0 0.25rem; }
+  .calc-intro { margin: 0 0 1rem; color: var(--muted); font-size: 0.9rem; }
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem 1.25rem;
+  }
+  .calc label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+  }
+  .calc input[type="number"] {
+    width: 80px;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font: inherit;
+  }
+  .result {
+    margin-top: 1.1rem;
+    padding: 0.9rem 1rem;
+    background: var(--bg);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .result dl { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 1rem; }
+  .result dt { color: var(--muted); }
+  .result dd { margin: 0; font-weight: 600; text-align: right; }
+  .calc-note { margin: 0.9rem 0 0; font-size: 0.8rem; color: var(--muted); }
+  @media (max-width: 560px) {
+    .calc-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const val = (id: string, fallback = 0) => {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    const v = el ? parseFloat(el.value) : NaN;
+    return Number.isFinite(v) ? v : fallback;
+  };
+  const money = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+
+  function estimate() {
+    const wallWidthIn = val('wp-width') * 12;
+    const wallHeightIn = val('wp-height') * 12;
+    const rollWidth = Math.max(1, val('wp-rollw', 20.5));
+    const rollLength = Math.max(1, val('wp-rolll', 16.5) * 12);
+    const repeat = Math.max(0, val('wp-repeat'));
+    const price = val('wp-price');
+
+    const strips = Math.max(1, Math.ceil(wallWidthIn / rollWidth));
+    let stripLength = wallHeightIn + 2;
+    if (repeat > 0) stripLength = Math.ceil(stripLength / repeat) * repeat;
+    const perRoll = Math.floor(rollLength / stripLength);
+    const el = document.getElementById('wp-result');
+    if (!el) return;
+
+    if (perRoll < 1) {
+      el.textContent = 'One strip is longer than a single roll for these numbers. Check the roll length and pattern repeat.';
+      return;
+    }
+    const rolls = Math.ceil(strips / perRoll);
+    const areaRolls = Math.ceil(((wallWidthIn / 12) * (wallHeightIn / 12)) / ((rollWidth / 12) * (rollLength / 12)));
+
+    el.innerHTML = `
+      <dl>
+        <dt>Strips across the wall</dt><dd>${strips}</dd>
+        <dt>Strip length (with trim${repeat > 0 ? ' and repeat' : ''})</dt><dd>${(stripLength / 12).toFixed(1)} ft</dd>
+        <dt>Strips per roll</dt><dd>${perRoll}</dd>
+        <dt>Rolls to buy</dt><dd>${rolls}</dd>
+        <dt>Estimated cost</dt><dd>${money(rolls * price)}</dd>
+        <dt>Rolls by simple area math (no repeat)</dt><dd>${areaRolls}</dd>
+      </dl>`;
+  }
+
+  ['wp-width', 'wp-height', 'wp-rollw', 'wp-rolll', 'wp-repeat', 'wp-price'].forEach((id) => {
+    const el = document.getElementById(id);
+    el?.addEventListener('input', estimate);
+  });
+  estimate();
+</script>
