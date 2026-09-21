@@ -218,6 +218,20 @@ const jsonLd =
         font-weight: 600;
       }
       .prose tr:nth-child(even) td { background: #fdfcf9; }
+      .prose a, .toc a { color: var(--accent-dark); }
+      .prose h2, .prose h3 { scroll-margin-top: 5rem; }
+      .prose h3 { font-size: 1.15rem; margin: 1.7rem 0 0.4rem; }
+      .prose blockquote {
+        margin: 1.5rem 0;
+        padding: 0.2rem 1.1rem;
+        border-left: 3px solid var(--accent);
+        color: var(--muted);
+      }
+      .prose a { text-underline-offset: 2px; }
+      .prose img { max-width: 100%; height: auto; }
+      @media (max-width: 640px) {
+        .prose table { display: block; overflow-x: auto; }
+      }
       .prose ul, .prose ol { padding-left: 1.25rem; }
       .prose li { margin: 0.35rem 0; }
     </style>

@@ -1,83 +1,131 @@
 ---
+interface Props {
+  length?: number;
+  width?: number;
+  height?: number;
+  doors?: number;
+  windows?: number;
+}
+const { length = 12, width = 12, height = 8, doors = 1, windows = 2 } = Astro.props;
 ---
 <div class="calc" id="paint-calc">
-  <h3>Paint Cost Calculator</h3>
-  <label>
-    Room length (ft)
-    <input type="number" id="pc-length" value="12" min="1" />
-  </label>
-  <label>
-    Room width (ft)
-    <input type="number" id="pc-width" value="10" min="1" />
-  </label>
-  <label>
-    Wall height (ft)
-    <input type="number" id="pc-height" value="8" min="1" />
-  </label>
-  <label>
-    Number of coats
-    <input type="number" id="pc-coats" value="2" min="1" max="4" />
-  </label>
-  <label>
-    Paint price per gallon ($)
-    <input type="number" id="pc-price" value="35" min="0" />
-  </label>
-  <div class="result" id="pc-result">Fill in the numbers above to see your estimate.</div>
+  <h3>Room paint calculator</h3>
+  <p class="calc-intro">Enter your room and get paint quantity, DIY cost and a rough professional labor range.</p>
+
+  <div class="calc-grid">
+    <label>Room length (ft)<input type="number" id="pc-length" value={length} min="1" /></label>
+    <label>Room width (ft)<input type="number" id="pc-width" value={width} min="1" /></label>
+    <label>Ceiling height (ft)<input type="number" id="pc-height" value={height} min="1" step="0.5" /></label>
+    <label>Doors<input type="number" id="pc-doors" value={doors} min="0" /></label>
+    <label>Windows<input type="number" id="pc-windows" value={windows} min="0" /></label>
+    <label>Coats<input type="number" id="pc-coats" value="2" min="1" max="4" /></label>
+    <label>Paint price per gallon ($)<input type="number" id="pc-price" value="35" min="0" /></label>
+    <label class="calc-check"><input type="checkbox" id="pc-ceiling" /> Also paint the ceiling</label>
+  </div>
+
+  <div class="result" id="pc-result" aria-live="polite">Fill in the numbers above to see your estimate.</div>
+  <p class="calc-note">
+    Assumes one gallon covers about 350 sq ft per coat (manufacturers quote 350–400), a door is about 20 sq ft and a
+    window about 15 sq ft. Professional labor uses $1.50–$3 per sq ft of wall (plus $75–$250 if you add the ceiling),
+    a rate published in one 2026 guide; other guides quote lower totals, so real quotes vary a lot by region, prep
+    work and painter. Treat this as a planning number, not a quote.
+  </p>
 </div>
 
 <style>
   .calc {
-    border: 1px solid #e4e0d6;
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
     padding: 1.25rem 1.5rem;
-    margin: 1.5rem 0;
-    background: #ffffff;
+    margin: 1.75rem 0;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
   }
-  .calc h3 { margin-top: 0; }
+  .calc h3 { margin: 0 0 0.25rem; }
+  .calc-intro { margin: 0 0 1rem; color: var(--muted); font-size: 0.9rem; }
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem 1.25rem;
+  }
   .calc label {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    margin: 0.5rem 0;
-    font-size: 0.95rem;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.92rem;
   }
-  .calc input {
-    width: 90px;
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #e4e0d6;
-    border-radius: 4px;
-  }
-  .result {
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: #fbfaf7;
+  .calc input[type="number"] {
+    width: 80px;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border);
     border-radius: 6px;
-    font-weight: 600;
+    font: inherit;
+  }
+  .calc-check { grid-column: 1 / -1; justify-content: flex-start !important; }
+  .result {
+    margin-top: 1.1rem;
+    padding: 0.9rem 1rem;
+    background: var(--bg);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .result strong { color: var(--accent-dark); }
+  .result dl { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 1rem; }
+  .result dt { color: var(--muted); }
+  .result dd { margin: 0; font-weight: 600; text-align: right; }
+  .calc-note { margin: 0.9rem 0 0; font-size: 0.8rem; color: var(--muted); }
+  @media (max-width: 560px) {
+    .calc-grid { grid-template-columns: 1fr; }
   }
 </style>
 
 <script>
+  const num = (id: string, fallback = 0) => {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    const v = el ? parseFloat(el.value) : NaN;
+    return Number.isFinite(v) ? v : fallback;
+  };
+  const money = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+
   function estimate() {
-    const length = parseFloat((document.getElementById('pc-length') as HTMLInputElement).value) || 0;
-    const width = parseFloat((document.getElementById('pc-width') as HTMLInputElement).value) || 0;
-    const height = parseFloat((document.getElementById('pc-height') as HTMLInputElement).value) || 0;
-    const coats = parseFloat((document.getElementById('pc-coats') as HTMLInputElement).value) || 1;
-    const pricePerGallon = parseFloat((document.getElementById('pc-price') as HTMLInputElement).value) || 0;
+    const length = num('pc-length');
+    const width = num('pc-width');
+    const height = num('pc-height');
+    const doors = num('pc-doors');
+    const windows = num('pc-windows');
+    const coats = Math.max(1, num('pc-coats', 1));
+    const price = num('pc-price');
+    const ceiling = (document.getElementById('pc-ceiling') as HTMLInputElement | null)?.checked ?? false;
 
-    const perimeter = 2 * (length + width);
-    const wallArea = perimeter * height;
-    // one gallon covers roughly 350 sq ft per coat
-    const gallonsNeeded = Math.ceil((wallArea * coats) / 350);
-    const totalCost = gallonsNeeded * pricePerGallon;
+    const grossWalls = 2 * (length + width) * height;
+    const walls = Math.max(0, grossWalls - doors * 20 - windows * 15);
+    const surface = walls + (ceiling ? length * width : 0);
 
-    const resultEl = document.getElementById('pc-result');
-    if (resultEl) {
-      resultEl.textContent = `You'll need about ${gallonsNeeded} gallon(s) of paint, costing roughly $${totalCost.toFixed(2)} for paint alone (${wallArea.toFixed(0)} sq ft of wall, ${coats} coat(s)).`;
-    }
+    const gallons = Math.max(1, Math.ceil((surface * coats) / 350));
+    const paintCost = gallons * price;
+    const diyLow = paintCost + 30;
+    const diyHigh = paintCost + 60;
+    const laborLow = walls * 1.5 + (ceiling ? 75 : 0);
+    const laborHigh = walls * 3 + (ceiling ? 250 : 0);
+
+    const el = document.getElementById('pc-result');
+    if (!el) return;
+    el.innerHTML = `
+      <dl>
+        <dt>Paintable area${ceiling ? ' (walls + ceiling)' : ' (walls)'}</dt><dd>${Math.round(surface)} sq ft</dd>
+        <dt>Paint needed (${coats} coat${coats > 1 ? 's' : ''})</dt><dd>${gallons} gallon${gallons > 1 ? 's' : ''}</dd>
+        <dt>Paint cost</dt><dd>${money(paintCost)}</dd>
+        <dt>DIY total incl. basic supplies ($30–$60)</dt><dd>${money(diyLow)}–${money(diyHigh)}</dd>
+        <dt>Professional labor (rough, paint extra)</dt><dd>${money(laborLow)}–${money(laborHigh)}</dd>
+      </dl>`;
   }
 
-  ['pc-length', 'pc-width', 'pc-height', 'pc-coats', 'pc-price'].forEach((id) => {
-    document.getElementById(id)?.addEventListener('input', estimate);
+  ['pc-length', 'pc-width', 'pc-height', 'pc-doors', 'pc-windows', 'pc-coats', 'pc-price', 'pc-ceiling'].forEach((id) => {
+    const el = document.getElementById(id);
+    el?.addEventListener('input', estimate);
+    el?.addEventListener('change', estimate);
   });
   estimate();
 </script>

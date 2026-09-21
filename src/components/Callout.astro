@@ -1,0 +1,47 @@
+---
+interface Props {
+  type?: 'tip' | 'warning' | 'note' | 'takeaway';
+  title?: string;
+}
+const { type = 'note', title } = Astro.props;
+const defaultTitles = {
+  tip: 'Money-saving tip',
+  warning: 'Watch out',
+  note: 'Good to know',
+  takeaway: 'Key takeaways',
+};
+---
+<aside class={`callout callout-${type}`}>
+  <p class="callout-title">{title ?? defaultTitles[type]}</p>
+  <div class="callout-body"><slot /></div>
+</aside>
+
+<style>
+  .callout {
+    --c: var(--accent);
+    --c-soft: var(--accent-soft);
+    margin: 1.75rem 0;
+    padding: 1rem 1.25rem 0.9rem;
+    border: 1px solid var(--c-soft);
+    border-left: 4px solid var(--c);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: var(--c-soft);
+  }
+  .callout-tip { --c: #4f7a3f; --c-soft: #edf4e6; }
+  .callout-warning { --c: #b3541e; --c-soft: #fbeadd; }
+  .callout-note { --c: #3f6ea5; --c-soft: #e8f0f9; }
+  .callout-takeaway { --c: var(--accent-dark); --c-soft: var(--accent-soft); }
+  .callout-title {
+    margin: 0 0 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--c);
+  }
+  .callout-body :global(p) { margin: 0.4rem 0; }
+  .callout-body :global(ul), .callout-body :global(ol) { margin: 0.4rem 0; padding-left: 1.2rem; }
+  .callout-body :global(li) { margin: 0.25rem 0; }
+  .callout-body :global(*:first-child) { margin-top: 0; }
+  .callout-body :global(*:last-child) { margin-bottom: 0; }
+</style>

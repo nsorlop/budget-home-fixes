@@ -15,8 +15,11 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const color = CATEGORY_COLORS[post.data.category];
+const toc = headings.filter((h) => h.depth === 2);
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
 const allPosts = await getCollection('blog');
 const related = allPosts
@@ -40,9 +43,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </a>
     <h1>{post.data.title}</h1>
     <p class="meta">
-      Published {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      {post.data.updatedDate
+        ? <>Updated {fmtDate(post.data.updatedDate)} &middot; First published {fmtDate(post.data.pubDate)}</>
+        : <>Published {fmtDate(post.data.pubDate)}</>}
     </p>
     <img class="hero-image" src={post.data.image} alt={post.data.imageAlt} width="720" height="360" />
+    {toc.length >= 4 && (
+      <nav class="toc" aria-label="In this guide">
+        <p class="toc-title">In this guide</p>
+        <ol>
+          {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        </ol>
+      </nav>
+    )}
     <div class="prose">
       <Content />
     </div>
@@ -89,6 +102,34 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     object-fit: cover;
     border-radius: var(--radius);
     margin-bottom: 1.5rem;
+  }
+  .toc {
+    margin: 0 0 2rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .toc-title {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .toc ol {
+    margin: 0;
+    padding-left: 1.2rem;
+    columns: 2;
+    column-gap: 2rem;
+    font-size: 0.92rem;
+  }
+  .toc li { margin: 0.25rem 0; break-inside: avoid; }
+  .toc a { text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  @media (max-width: 640px) {
+    .toc ol { columns: 1; }
   }
   .related {
     margin-top: 3rem;
