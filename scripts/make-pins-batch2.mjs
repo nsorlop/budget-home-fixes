@@ -10,10 +10,15 @@ const root = resolve(import.meta.dirname, '..');
 const blogDir = join(root, 'src/content/blog');
 const publicDir = join(root, 'public');
 const outDir = join(publicDir, 'pins');
-const csvPath = join(root, 'pinterest', 'pins-batch2.csv');
 const site = 'https://thebudgethomefixes.com';
 
 const args = process.argv.slice(2);
+const argVal = (name) => {
+  const i = args.indexOf(name);
+  return i >= 0 ? args[i + 1] : undefined;
+};
+const onlySlugs = argVal('--only')?.split(',');
+const csvPath = join(root, 'pinterest', argVal('--csv') ?? 'pins-batch2.csv');
 const startArg = args.indexOf('--start');
 const startDate = new Date((startArg >= 0 ? args[startArg + 1] : new Date(Date.now() + 86400000).toISOString().slice(0, 10)) + 'T00:00:00Z');
 
@@ -144,7 +149,8 @@ mkdirSync(join(root, 'pinterest'), { recursive: true });
 const articles = readdirSync(blogDir)
   .filter((f) => /\.mdx?$/.test(f))
   .sort()
-  .map((f) => ({ slug: f.replace(/\.mdx?$/, ''), ...parse(join(blogDir, f)) }));
+  .map((f) => ({ slug: f.replace(/\.mdx?$/, ''), ...parse(join(blogDir, f)) }))
+  .filter((a) => !onlySlugs || onlySlugs.includes(a.slug));
 
 // variant-major order so pins for the same article are ~10 days apart
 const jobs = [];
@@ -175,4 +181,4 @@ for (const { a, variant, q, photo } of jobs) {
   n++;
 }
 writeFileSync(csvPath, rows.map((r) => r.map(csvEscape).join(',')).join('\r\n') + '\r\n', 'utf8');
-console.log(`Wrote ${n} pins -> public/pins and pinterest/pins-batch2.csv (last publish ${rows[rows.length - 1][5]})`);
+console.log(`Wrote ${n} pins -> public/pins and ${csvPath} (last publish ${rows[rows.length - 1][5]})`);
