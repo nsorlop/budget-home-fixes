@@ -1,0 +1,16 @@
+# Budget Home Fixes
+
+> Cost breakdowns and side-by-side comparisons for home upgrades, written for renters and people on a tight budget. Every guide lists the sources it used, shows where sources disagree, and labels its own estimates. Articles are researched and written with AI assistance and fact-checked against the cited sources.
+
+## Main sections
+- [All guides](https://thebudgethomefixes.com/): latest cost guides
+- [Painting](https://thebudgethomefixes.com/category/painting/)
+- [Wallpaper](https://thebudgethomefixes.com/category/wallpaper/)
+- [Kitchen](https://thebudgethomefixes.com/category/kitchen/)
+- [Storage](https://thebudgethomefixes.com/category/storage/)
+- [Guides](https://thebudgethomefixes.com/category/guides/)
+
+## About
+- [About and methodology](https://thebudgethomefixes.com/about/)
+- [Contact](https://thebudgethomefixes.com/contact/)
+- [Privacy policy](https://thebudgethomefixes.com/privacy-policy/)

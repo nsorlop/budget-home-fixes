@@ -31,6 +31,11 @@ const pageTitle = CATEGORY_PAGE_TITLES[category];
   </div>
   <h1>{pageTitle}</h1>
   <p class="subtitle">{description}</p>
+  <p class="intro">
+    {posts.length} {posts.length === 1 ? 'guide' : 'guides'} in this section, newest first. Each one lists its
+    sources, shows where they disagree, and labels any figure that is our own arithmetic. Not sure where to
+    begin? Open <a href={`/blog/${posts[0].id}`}>{posts[0].data.title}</a>, then follow the related guides at the bottom of the page.
+  </p>
 
   <div class="grid">
     {posts.map((post) => <PostCard post={post} />)}
@@ -54,6 +59,11 @@ const pageTitle = CATEGORY_PAGE_TITLES[category];
     color: var(--muted);
     margin: 0 0 2rem;
     max-width: 34rem;
+  }
+  .intro {
+    margin: -1rem 0 2rem;
+    max-width: 38rem;
+    font-size: 0.95rem;
   }
   .grid {
     display: grid;

@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+<BaseLayout title="Page not found" description="That page does not exist. Browse our latest home cost guides instead.">
+  <h1>Page not found</h1>
+  <p>We could not find that page. It may have moved, or the link may have a typo. Here are our latest guides, or go back to the <a href="/">home page</a>.</p>
+  <div class="grid">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 1.1rem;
+    margin-top: 1.5rem;
+  }
+</style>
