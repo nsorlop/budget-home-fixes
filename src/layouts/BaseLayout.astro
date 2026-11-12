@@ -18,6 +18,7 @@ const normalize = (p: string) => p.replace(/\/+$/, '') || '/';
 const currentPath = normalize(Astro.url.pathname);
 const navLinks = [
   { href: '/', label: 'Home' },
+  { href: '/tools', label: 'Tools' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
   { href: '/privacy-policy', label: 'Privacy' },

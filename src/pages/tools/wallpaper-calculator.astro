@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WallpaperCalculator from '../../components/WallpaperCalculator.astro';
+---
+<BaseLayout
+  title="Wallpaper Roll Calculator"
+  description="Free wallpaper calculator: enter wall size, roll size and pattern repeat to see how many rolls you need and the cost, including pattern waste."
+>
+  <h1>Wallpaper roll calculator</h1>
+  <p>
+    Enter the total width of the walls you are covering, the wall height, your roll size and the
+    pattern repeat. The calculator shows how many rolls to buy, including the waste a repeat causes, and
+    the cost at your price per roll. Nothing you type leaves your browser.
+  </p>
+
+  <WallpaperCalculator width={12} height={8} price={30} />
+
+  <h2>Why pattern repeat matters</h2>
+  <p>
+    Each strip has to start at the right point in the pattern, so a larger repeat wastes more of every
+    strip. A plain or random-match pattern wastes the least. When in doubt, add one roll for mistakes
+    and future repairs, and buy all rolls from the same batch so the color matches.
+  </p>
+
+  <h2>Related guides</h2>
+  <ul>
+    <li><a href="/blog/removable-wallpaper-cost-per-room/">Removable wallpaper cost per room</a></li>
+    <li><a href="/blog/peel-and-stick-wallpaper-vs-paint/">Peel-and-stick wallpaper vs paint</a></li>
+    <li><a href="/blog/removable-wallpaper-vs-wall-decals/">Removable wallpaper vs wall decals</a></li>
+  </ul>
+</BaseLayout>

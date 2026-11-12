@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PaintCostCalculator from '../../components/PaintCostCalculator.astro';
+---
+<BaseLayout
+  title="Room Paint Calculator: Gallons and Cost"
+  description="Free room paint calculator: enter room size, doors, windows and coats to get gallons needed, DIY cost and a rough professional price range."
+>
+  <h1>Room paint calculator</h1>
+  <p>
+    Enter your room size, the number of doors and windows and how many coats you plan to apply. The
+    calculator returns the gallons to buy, the DIY cost and a rough professional labor range. No
+    sign-up, and nothing you type leaves your browser.
+  </p>
+
+  <PaintCostCalculator length={12} width={12} height={8} doors={1} windows={2} />
+
+  <h2>How the estimate works</h2>
+  <p>
+    Wall area is the room's perimeter times the ceiling height. The tool subtracts openings (our guides
+    use about 20 sq ft per door and 15 per window), multiplies by the number of coats, and divides by
+    the coverage of a gallon. Sources we cite put that at about 350 to 400 sq ft per coat on smooth,
+    primed walls, and the figure printed on your can is the one to trust. The result is rounded up to
+    whole containers.
+  </p>
+  <p>
+    Texture, bare drywall and big color changes use more paint, and primer covers less per gallon than
+    paint. Professional labor is a rough range, not a quote: get written quotes before you hire anyone.
+  </p>
+
+  <h2>Related guides</h2>
+  <ul>
+    <li><a href="/blog/how-much-paint-do-i-need/">How much paint do I need? Formula and worked examples</a></li>
+    <li><a href="/blog/cost-to-paint-a-room/">Cost to paint a room</a></li>
+    <li><a href="/blog/cost-to-paint-trim-and-baseboards/">Cost to paint trim and baseboards</a></li>
+    <li><a href="/blog/paint-roller-vs-sprayer-cost/">Paint roller vs sprayer cost</a></li>
+  </ul>
+</BaseLayout>
