@@ -13,7 +13,12 @@ const si = args.indexOf('--start');
 const start = new Date((si >= 0 ? args[si + 1] : '2026-12-11') + 'T00:00:00Z');
 const font = ['C:/Windows/Fonts/georgiab.ttf', 'C:/Windows/Fonts/arialbd.ttf'].find((f) => existsSync(f));
 
-const pins = [
+const onlyI = args.indexOf("--only");
+const only = onlyI >= 0 ? args[onlyI + 1].split(",") : null;
+const csvI = args.indexOf("--csv");
+const csvName = csvI >= 0 ? args[csvI + 1] : "pins-tools.csv";
+
+const allPins = [
   {
     slug: 'tool-paint-calculator', category: 'Free calculator', variant: 'c',
     title: 'How many gallons of paint do I need? Free room calculator',
@@ -28,7 +33,15 @@ const pins = [
     link: `${site}/tools/wallpaper-calculator/`,
     desc: 'Enter wall size, roll size and pattern repeat to see how many rolls to buy and what they cost, including pattern waste. Free, no sign-up. More at thebudgethomefixes.com.',
   },
+  {
+    slug: "tool-flooring-calculator", category: "Free calculator", variant: "c",
+    title: "How much will my new floor cost? Free flooring calculator",
+    photo: "/images/floor-empty-room-wood.jpg", board: "Renter Tips and Deposit Guides",
+    link: `${site}/tools/flooring-calculator/`,
+    desc: "Enter room size and pick vinyl plank or peel-and-stick tile to see square feet to buy, materials cost and a rough pro labor range. Free, no sign-up. Sources at thebudgethomefixes.com.",
+  },
 ];
+const pins = only ? allPins.filter((p) => only.includes(p.slug)) : allPins.slice(0, 2);
 
 function wrap(text, max) {
   const lines = []; let line = '';
@@ -73,5 +86,5 @@ pins.forEach((p, i) => {
   const day = new Date(start.getTime() + i * 86400000).toISOString().slice(0, 10);
   rows.push([p.title, `${site}/pins/${p.slug}.jpg`, p.board, p.desc, p.link, day + 'T14:00:00']);
 });
-writeFileSync(join(root, 'pinterest', 'pins-tools.csv'), rows.map((r) => r.map(esc).join(',')).join('\r\n') + '\r\n', 'utf8');
-console.log('Wrote', pins.length, 'pins -> pinterest/pins-tools.csv');
+writeFileSync(join(root, 'pinterest', csvName), rows.map((r) => r.map(esc).join(',')).join('\r\n') + '\r\n', 'utf8');
+console.log('Wrote', pins.length, 'pins ->', csvName);

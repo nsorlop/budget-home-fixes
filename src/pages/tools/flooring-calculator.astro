@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FlooringCostCalculator from '../../components/FlooringCostCalculator.astro';
+---
+<BaseLayout
+  title="Flooring Cost Calculator: Vinyl Plank and Peel-and-Stick"
+  description="Free flooring cost calculator: enter room size and floor type to see square feet to buy, materials cost and a rough pro labor range. No sign-up."
+>
+  <h1>Flooring cost calculator</h1>
+  <p>
+    Enter your room size, choose peel-and-stick tile or click-lock vinyl plank, and see how many square
+    feet to buy plus a materials range and a rough professional labor range. Every price is editable, so
+    you can plug in a real quote or a store listing. No sign-up, and nothing you type leaves your browser.
+  </p>
+
+  <FlooringCostCalculator length={12} width={10} />
+
+  <h2>What the numbers include</h2>
+  <p>
+    The tool adds a waste allowance to your floor area (10% by default; sources we read range from 5% for a
+    simple rectangle to 10-15% for diagonal layouts) and multiplies by the low and high price per square
+    foot. Labor is a separate range, and the sources disagree a lot on it, which is why the plank range is
+    wide. Removing an old floor, trim, transitions, leveling and subfloor repair are extras: the removal
+    checkbox uses one guide's figure, and the rest are not included.
+  </p>
+  <p>
+    A flat, clean, dry subfloor matters more than the product for how a floor lasts. Check the
+    manufacturer's instructions, and if you rent, get written permission before installing anything.
+  </p>
+
+  <h2>Related guides</h2>
+  <ul>
+    <li><a href="/blog/peel-and-stick-floor-tile-cost/">Peel-and-stick floor tile cost</a></li>
+    <li><a href="/blog/cost-to-install-vinyl-plank-flooring/">Cost to install vinyl plank flooring</a></li>
+    <li><a href="/blog/cheapest-flooring-for-a-rental-property/">Cheapest flooring for a rental property</a></li>
+    <li><a href="/blog/renter-friendly-flooring-cost-comparison/">Renter-friendly flooring cost comparison</a></li>
+  </ul>
+</BaseLayout>

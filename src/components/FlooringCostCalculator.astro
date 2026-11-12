@@ -1,0 +1,154 @@
+---
+interface Props {
+  length?: number;
+  width?: number;
+}
+const { length = 12, width = 10 } = Astro.props;
+---
+<div class="calc" id="floor-calc">
+  <h3>Flooring cost calculator</h3>
+  <p class="calc-intro">Enter your room and pick a floor type to get the square feet to buy, a materials range and a rough professional labor range. Prices are editable.</p>
+
+  <div class="calc-grid">
+    <label>Room length (ft)<input type="number" id="fc-length" value={length} min="1" step="0.5" /></label>
+    <label>Room width (ft)<input type="number" id="fc-width" value={width} min="1" step="0.5" /></label>
+    <label>Extra for cuts and waste (%)<input type="number" id="fc-waste" value="10" min="0" max="30" /></label>
+    <label>Floor type
+      <select id="fc-type">
+        <option value="tile">Peel-and-stick tile</option>
+        <option value="plank">Vinyl plank</option>
+      </select>
+    </label>
+    <label>Material $/sq ft, low<input type="number" id="fc-mlow" value="0.5" min="0" step="0.25" /></label>
+    <label>Material $/sq ft, high<input type="number" id="fc-mhigh" value="5" min="0" step="0.25" /></label>
+    <label>Labor $/sq ft, low<input type="number" id="fc-llow" value="1" min="0" step="0.25" /></label>
+    <label>Labor $/sq ft, high<input type="number" id="fc-lhigh" value="4" min="0" step="0.25" /></label>
+    <label class="calc-check"><input type="checkbox" id="fc-removal" /> Include removing the old floor ($1.50&ndash;$3.50 per sq ft if a pro does it)</label>
+  </div>
+
+  <div class="result" id="fc-result" aria-live="polite">Fill in the numbers above to see your estimate.</div>
+  <p class="calc-note">
+    Defaults come from the sources in our guides. Peel-and-stick tile: about $0.50 to $5 per sq ft for the tile and $1 to
+    $4 per sq ft labor (Fixr, January 2025). Click-lock vinyl plank: about $2 to $7 per sq ft for materials in cost guides
+    and $1.50 to $10 per sq ft labor, because the guides we read disagree widely. Old-floor removal is one guide's
+    figure. Trim, transitions, leveling and subfloor repair are not included. This is a planning number, not a quote.
+  </p>
+</div>
+
+<style>
+  .calc {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin: 1.75rem 0;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .calc h3 { margin: 0 0 0.25rem; }
+  .calc-intro { margin: 0 0 1rem; color: var(--muted); font-size: 0.9rem; }
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem 1.25rem;
+  }
+  .calc label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+  }
+  .calc input[type="number"], .calc select {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font: inherit;
+    background: var(--surface);
+  }
+  .calc input[type="number"] { width: 80px; }
+  .calc select { width: 170px; }
+  .calc-check { grid-column: 1 / -1; justify-content: flex-start !important; }
+  .result {
+    margin-top: 1.1rem;
+    padding: 0.9rem 1rem;
+    background: var(--bg);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .result dl { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 1rem; }
+  .result dt { color: var(--muted); }
+  .result dd { margin: 0; font-weight: 600; text-align: right; }
+  .calc-note { margin: 0.9rem 0 0; font-size: 0.8rem; color: var(--muted); }
+  @media (max-width: 560px) {
+    .calc-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const num = (id: string, fallback = 0) => {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    const v = el ? parseFloat(el.value) : NaN;
+    return Number.isFinite(v) ? v : fallback;
+  };
+  const money = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+  const range = (a: number, b: number) => (Math.round(a) === Math.round(b) ? money(a) : money(a) + '–' + money(b));
+
+  const PRESETS: Record<string, [number, number, number, number]> = {
+    tile: [0.5, 5, 1, 4],
+    plank: [2, 7, 1.5, 10],
+  };
+
+  function estimate() {
+    const area = num('fc-length') * num('fc-width');
+    const waste = Math.max(0, num('fc-waste'));
+    const buy = Math.ceil(area * (1 + waste / 100));
+    const mlow = num('fc-mlow');
+    const mhigh = Math.max(mlow, num('fc-mhigh'));
+    const llow = num('fc-llow');
+    const lhigh = Math.max(llow, num('fc-lhigh'));
+    const removal = (document.getElementById('fc-removal') as HTMLInputElement | null)?.checked ?? false;
+
+    const matLow = buy * mlow;
+    const matHigh = buy * mhigh;
+    const labLow = area * llow;
+    const labHigh = area * lhigh;
+    const remLow = removal ? area * 1.5 : 0;
+    const remHigh = removal ? area * 3.5 : 0;
+
+    const el = document.getElementById('fc-result');
+    if (!el) return;
+    if (area <= 0) {
+      el.textContent = 'Enter a room length and width.';
+      return;
+    }
+    const rows: [string, string][] = [
+      ['Floor area', Math.round(area * 10) / 10 + ' sq ft'],
+      ['Buy (with ' + waste + '% extra)', buy + ' sq ft'],
+      ['Materials (DIY total' + (removal ? ' if you remove the old floor yourself' : '') + ')', range(matLow, matHigh)],
+      ['Professional labor (installation)', range(labLow, labHigh)],
+    ];
+    if (removal) rows.push(['Pro removal of old floor', range(remLow, remHigh)]);
+    rows.push([
+      'Everything done by a pro (materials + labor' + (removal ? ' + removal' : '') + ')',
+      range(matLow + labLow + remLow, matHigh + labHigh + remHigh),
+    ]);
+    el.innerHTML = '<dl>' + rows.map(([k, v]) => '<dt>' + k + '</dt><dd>' + v + '</dd>').join('') + '</dl>';
+  }
+
+  const type = document.getElementById('fc-type') as HTMLSelectElement | null;
+  type?.addEventListener('change', () => {
+    const p = PRESETS[type.value];
+    if (!p) return;
+    ['fc-mlow', 'fc-mhigh', 'fc-llow', 'fc-lhigh'].forEach((id, i) => {
+      (document.getElementById(id) as HTMLInputElement).value = String(p[i]);
+    });
+    estimate();
+  });
+  ['fc-length', 'fc-width', 'fc-waste', 'fc-mlow', 'fc-mhigh', 'fc-llow', 'fc-lhigh', 'fc-removal'].forEach((id) => {
+    const el = document.getElementById(id);
+    el?.addEventListener('input', estimate);
+    el?.addEventListener('change', estimate);
+  });
+  estimate();
+</script>
