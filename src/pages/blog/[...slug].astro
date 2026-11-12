@@ -28,6 +28,36 @@ const related = allPosts
   .slice(0, 3);
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// FAQPage structured data: read the "## ... FAQ" section ("### Question" + answer paragraphs) from the source.
+const plain = (s: string) =>
+  s
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/[*_`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+const faq: { q: string; a: string }[] = [];
+{
+  const lines = (post.body ?? '').split(/\r?\n/);
+  const start = lines.findIndex((l) => /^## .*FAQ/i.test(l));
+  if (start >= 0) {
+    let i = start + 1;
+    while (i < lines.length && !/^## /.test(lines[i])) {
+      if (/^### /.test(lines[i])) {
+        const q = plain(lines[i].replace(/^### /, ''));
+        const ans: string[] = [];
+        i++;
+        while (i < lines.length && !/^#{2,3} /.test(lines[i])) {
+          if (lines[i].trim()) ans.push(lines[i]);
+          i++;
+        }
+        const a = plain(ans.join(' '));
+        if (q && a) faq.push({ q, a });
+      } else i++;
+    }
+  }
+}
 ---
 <BaseLayout
   title={post.data.title}
@@ -36,6 +66,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   pubDate={post.data.pubDate}
   updatedDate={post.data.updatedDate}
   image={post.data.image}
+  faq={faq}
 >
   <article>
     <a class="tag" href={`/category/${categorySlug(post.data.category)}`} style={`color: ${color}`}>
