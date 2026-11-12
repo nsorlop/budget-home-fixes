@@ -1,7 +1,7 @@
 export const CATEGORY_COLORS: Record<string, string> = {
-  Painting: '#c1571f',
+  Painting: '#b7531d',
   Wallpaper: '#5f7a4f',
-  Kitchen: '#a2703c',
+  Kitchen: '#956737',
   Storage: '#3f6ea5',
   Guides: '#7c5a96',
 };
